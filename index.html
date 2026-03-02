@@ -5,399 +5,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Will You Be Mine?</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            overflow-x: hidden;
-            background-color: #000;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: white;
-        }
-
-        .ui-container {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 10;
-            width: 100%;
-            transition: opacity 0.5s;
-        }
-
-        .title {
-            font-size: 3rem;
-            text-shadow: 0 0 10px #ff0055;
-            animation: pulse 1.5s infinite;
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            font-size: 1.2rem;
-            color: #ccc;
-            margin-bottom: 30px;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s;
-            outline: none;
-        }
-
-        .yes {
-            background: linear-gradient(45deg, #ff0055, #ff00aa);
-            color: white;
-            box-shadow: 0 0 20px #ff0055;
-        }
-
-        .no {
-            background: #333;
-            color: #777;
-            border: 2px solid #555;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow-x: hidden; background-color: #000; font-family: 'Segoe UI', sans-serif; color: white; }
+        
+        .ui-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 10; width: 100%; }
+        .title { font-size: 3rem; text-shadow: 0 0 10px #ff0055; animation: pulse 1.5s infinite; margin-bottom: 10px; }
+        .subtitle { font-size: 1.2rem; color: #ccc; margin-bottom: 30px; }
+        .buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn { padding: 15px 40px; font-size: 1.5rem; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .yes { background: linear-gradient(45deg, #ff0055, #ff00aa); color: white; box-shadow: 0 0 20px #ff0055; }
+        .no { background: #333; color: #777; border: 2px solid #555; }
         .btn:hover { transform: scale(1.1); }
-
-        .cat-container {
-            position: absolute;
-            width: 100%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 5;
-        }
-
+        
+        .cat-container { position: absolute; width: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); pointer-events: none; z-index: 5; display: none; }
         .cat { font-size: 3rem; position: absolute; animation: catMove 2s ease-in-out infinite; }
         .cat-left { left: -120px; top: -30px; }
         .cat-right { right: -120px; top: -30px; animation-delay: 1s; }
+        @keyframes catMove { 0%, 100% { transform: translateY(0) rotate(-5deg); } 50% { transform: translateY(-15px) rotate(5deg); } }
 
-        @keyframes catMove {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-15px) rotate(5deg); }
-        }
+        #musicControls { position: absolute; bottom: 20px; right: 20px; z-index: 100; display: flex; gap: 10px; }
+        .music-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 15px; border-radius: 30px; cursor: pointer; font-size: 0.9rem; }
+        .music-btn:hover { background: rgba(255,255,255,0.2); }
+        .music-btn.active { background: rgba(0,255,0,0.3); border-color: #00ff00; }
 
-        #musicControls {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            display: flex;
-            gap: 10px;
-        }
-
-        .music-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .music-btn:hover { background: rgba(255, 255, 255, 0.2); }
-        .music-btn.active { background: rgba(0, 255, 0, 0.3); border-color: #00ff00; }
-
-        #message {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid #00ff00;
-            text-align: center;
-            display: none;
-            z-index: 20;
-            box-shadow: 0 0 50px rgba(0, 255, 0, 0.5);
-            max-width: 95%;
-            width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
+        #message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.95); padding: 30px; border-radius: 20px; border: 2px solid #00ff00; text-align: center; display: none; z-index: 20; box-shadow: 0 0 50px rgba(0,255,0,0.5); max-width: 95%; width: 600px; max-height: 90vh; overflow-y: auto; }
         #message h1 { color: #00ff00; font-size: 2.5rem; margin-bottom: 15px; }
-
-        #changing-text {
-            font-size: 1.5rem;
-            color: #fff;
-            min-height: 50px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-
+        #changing-text { font-size: 1.5rem; color: #fff; min-height: 50px; margin-bottom: 20px; cursor: pointer; }
         .blink { animation: blinkAnim 0.5s infinite; }
-
-        @keyframes blinkAnim {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
-        }
-
+        @keyframes blinkAnim { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.05); } }
         .ring-container { position: relative; width: 80px; height: 80px; margin: 0 auto 15px; }
         .ring { font-size: 3.5rem; animation: ringShine 2s infinite; }
-
-        @keyframes ringShine {
-            0%, 100% { transform: rotate(0deg) scale(1); filter: brightness(1); }
-            50% { transform: rotate(15deg) scale(1.1); filter: brightness(1.5); }
-        }
-
-        .photo-frame {
-            width: 150px; height: 150px; margin: 15px auto;
-            border: 8px solid white; border-radius: 10px;
-            background: linear-gradient(45deg, #ff69b4, #ff1493);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 3rem;
-            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
-            animation: float 3s ease-in-out infinite;
-        }
-
+        @keyframes ringShine { 0%, 100% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(15deg) scale(1.1); } }
+        .photo-frame { width: 150px; height: 150px; margin: 15px auto; border: 8px solid white; border-radius: 10px; background: linear-gradient(45deg, #ff69b4, #ff1493); display: flex; align-items: center; justify-content: center; font-size: 3rem; animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .love-calculator { background: rgba(255, 0, 85, 0.2); padding: 15px; border-radius: 15px; margin: 15px 0; }
+        .love-calculator { background: rgba(255,0,85,0.2); padding: 15px; border-radius: 15px; margin: 15px 0; }
         .love-calculator h3 { color: #ff69b4; margin-bottom: 10px; }
-        .love-result { font-size: 2rem; color: #ff1493; font-weight: bold; animation: pulse 1s infinite; }
-
-        /* ⏳ COUNTDOWN TIMER STYLES - ADDED! */
-        .countdown-section {
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 2px solid #00ff00;
-        }
-
-        .countdown-label {
-            font-size: 1.2rem;
-            color: #00ff00;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .time-box {
-            background: rgba(0, 255, 0, 0.1);
-            padding: 15px 20px;
-            border-radius: 10px;
-            min-width: 70px;
-            border: 1px solid #00ff00;
-        }
-
-        .time-box .number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #00ff00;
-            display: block;
-        }
-
-        .time-box .label {
-            font-size: 0.8rem;
-            color: #aaa;
-            margin-top: 5px;
-            text-transform: uppercase;
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 20px 0;
-        }
-
-        .action-btn {
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: 2px solid #00ff00;
-            background: transparent;
-            color: #00ff00;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .action-btn:hover {
-            background: #00ff00;
-            color: black;
-            transform: scale(1.05);
-        }
-
-        .love-letter {
-            background: linear-gradient(to bottom, #fff8dc, #f5deb3);
-            color: #8b4513;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            font-style: italic;
-            text-align: left;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-
-        .letter-text { font-size: 1rem; line-height: 1.8; min-height: 80px; }
-
-        .promises {
-            background: rgba(0, 255, 0, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-            margin: 15px 0;
-            text-align: left;
-        }
-
-        .promises h3 { color: #00ff00; text-align: center; margin-bottom: 15px; border-bottom: 1px solid #00ff00; padding-bottom: 10px; }
-        .promise-item { display: flex; align-items: center; margin: 8px 0; opacity: 0; animation: fadeIn 0.5s forwards; }
-        .promise-item span { margin-right: 10px; font-size: 1.2rem; }
-
-        @keyframes fadeIn { to { opacity: 1; } }
-
+        .love-result { font-size: 2rem; color: #ff1493; font-weight: bold; }
+        
+        .countdown-section { background: linear-gradient(45deg, #1a1a2e, #16213e); padding: 20px; border-radius: 15px; margin: 20px 0; border: 2px solid #00ff00; }
+        .countdown-label { font-size: 1.2rem; color: #00ff00; margin-bottom: 15px; }
+        .countdown-timer { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .time-box { background: rgba(0,255,0,0.1); padding: 15px 20px; border-radius: 10px; min-width: 70px; border: 1px solid #00ff00; }
+        .time-box .number { font-size: 2rem; font-weight: bold; color: #00ff00; display: block; }
+        .time-box .label { font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+        
+        .action-buttons { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+        .action-btn { padding: 10px 20px; font-size: 1rem; border: 2px solid #00ff00; background: transparent; color: #00ff00; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+        .action-btn:hover { background: #00ff00; color: black; transform: scale(1.05); }
+        
+        .love-letter { background: linear-gradient(to bottom, #fff8dc, #f5deb3); color: #8b4513; padding: 20px; border-radius: 10px; margin: 20px 0; font-style: italic; display: none; }
+        .letter-text { font-size: 1rem; line-height: 1.8; }
+        
+        .promises { background: rgba(0,255,0,0.1); padding: 15px; border-radius: 15px; margin: 15px 0; text-align: left; display: none; }
+        .promises h3 { color: #00ff00; text-align: center; margin-bottom: 15px; }
+        .promise-item { display: flex; align-items: center; margin: 8px 0; }
+        
         .stars-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-        .star { position: absolute; font-size: 1.5rem; cursor: pointer; pointer-events: auto; animation: twinkle 2s infinite; }
-        .star:hover { transform: scale(1.5); }
-        @keyframes twinkle { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
-
+        .star { position: absolute; font-size: 1.5rem; cursor: pointer; animation: twinkle 2s infinite; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+        
         .kiss { position: fixed; font-size: 2rem; pointer-events: none; z-index: 1000; animation: flyKiss 2s forwards; }
-        @keyframes flyKiss { 0% { opacity: 1; transform: translate(0, 0); } 100% { opacity: 0; transform: translate(var(--tx), var(--ty)); } }
-
-        .hug-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.8); display: none; align-items: center;
-            justify-content: center; z-index: 2000; flex-direction: column;
-        }
-
-        .hug-emoji { font-size: 8rem; animation: hugAnim 1s infinite; }
-        @keyframes hugAnim { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .hug-text { font-size: 2rem; color: #ff69b4; margin-top: 20px; animation: pulse 1s infinite; }
-
-        .future-plans { margin-top: 20px; background: rgba(255, 105, 180, 0.1); padding: 15px; border-radius: 15px; }
+        @keyframes flyKiss { 0% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--tx), var(--ty)); } }
+        
+        .hug-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 2000; flex-direction: column; }
+        .hug-emoji { font-size: 8rem; }
+        .hug-text { font-size: 2rem; color: #ff69b4; margin-top: 20px; }
+        
+        .future-plans { margin-top: 20px; background: rgba(255,105,180,0.1); padding: 15px; border-radius: 15px; }
         .future-plans h3 { color: #ff69b4; margin-bottom: 15px; }
-        .plan-item { display: flex; align-items: center; margin: 8px 0; opacity: 0; animation: fadeIn 0.5s forwards; }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #ff0055; border-radius: 4px; }
+        .plan-item { display: flex; align-items: center; margin: 8px 0; }
 
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     </style>
 </head>
 <body>
 
-    <div class="stars-container" id="starsContainer"></div>
-    <div class="cat-container" id="cats" style="display: none;">
-        <div class="cat cat-left">🐱</div>
-        <div class="cat cat-right">😸</div>
-    </div>
+<div class="stars-container" id="starsContainer"></div>
+<div class="cat-container" id="cats">
+    <div class="cat cat-left">🐱</div>
+    <div class="cat cat-right">😸</div>
+</div>
 
-    <div class="hug-overlay" id="hugOverlay" onclick="closeHug()">
-        <div class="hug-emoji">🤗</div>
-        <div class="hug-text">Sending You A Big Hug! 🤗</div>
-    </div>
+<div class="hug-overlay" id="hugOverlay" onclick="closeHug()">
+    <div class="hug-emoji">🤗</div>
+    <div class="hug-text">Sending You A Big Hug! 🤗</div>
+</div>
 
-    <div id="musicControls">
-        <button class="music-btn active" onclick="playSong(0)">🎵 1</button>
-        <button class="music-btn" onclick="playSong(1)">🎵 2</button>
-        <button class="music-btn" onclick="playSong(2)">🎵 3</button>
-    </div>
+<div id="musicControls">
+    <button class="music-btn active" onclick="playSong(0)">🎵 1</button>
+    <button class="music-btn" onclick="playSong(1)">🎵 2</button>
+    <button class="music-btn" onclick="playSong(2)">🎵 3</button>
+</div>
 
-    <div class="ui-container" id="mainUI">
-        <h1 class="title">I Have Something To Ask...</h1>
-        <p class="subtitle">Look at the heart below 💍</p>
-        <div class="buttons">
-            <button id="yesBtn" class="btn yes">YES 💖</button>
-            <button id="noBtn" class="btn no">NO 😢</button>
-        </div>
+<div class="ui-container" id="mainUI">
+    <h1 class="title">I Have Something To Ask...</h1>
+    <p class="subtitle">Look at the heart below 💍</p>
+    <div class="buttons">
+        <button id="yesBtn" class="btn yes">YES 💖</button>
+        <button id="noBtn" class="btn no">NO 😢</button>
     </div>
+</div>
 
-    <div id="message">
-        <div class="ring-container">
-            <div class="ring">💍</div>
-        </div>
-        
-        <h1 id="changing-text" onclick="nextMessage()">❤️ I Love You! ❤️</h1>
-        
-        <div class="photo-frame">👫</div>
-        
-        <div class="love-calculator">
-            <h3>💕 Love Calculator</h3>
-            <div class="love-result" id="loveResult">❤️ 100% ❤️</div>
-        </div>
-        
-        <!-- ⏳ COUNTDOWN TIMER - ADDED BACK! -->
-        <div class="countdown-section">
-            <div class="countdown-label">⏳ Countdown to Our Future 💍</div>
-            <div class="countdown-timer">
-                <div class="time-box">
-                    <span class="number" id="days">00</span>
-                    <span class="label">Days</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="hours">00</span>
-                    <span class="label">Hours</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="minutes">00</span>
-                    <span class="label">Mins</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="seconds">00</span>
-                    <span class="label">Secs</span>
-                </div>
-            </div>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="action-btn" onclick="sendHug()">🤗 Hug</button>
-            <button class="action-btn" onclick="sendKiss()">😘 Kiss</button>
-            <button class="action-btn" onclick="showLetter()">💌 Letter</button>
-            <button class="action-btn" onclick="showPromises()">💝 Promises</button>
-        </div>
-        
-        <div class="love-letter" id="loveLetter" style="display: none;">
-            <div class="letter-text" id="letterText"></div>
-        </div>
-        
-        <div class="promises" id="promises" style="display: none;">
-            <h3>💝 My Promises To You</h3>
-            <div id="promisesList"></div>
-        </div>
-        
-        <div class="future-plans">
-            <h3>🚀 Our Future Plans</h3>
-            <div id="plansContainer"></div>
+<div id="message">
+    <div class="ring-container"><div class="ring">💍</div></div>
+    <h1 id="changing-text" onclick="nextMessage()">❤️ I Love You! ❤️</h1>
+    <div class="photo-frame">👫</div>
+    <div class="love-calculator">
+        <h3>💕 Love Calculator</h3>
+        <div class="love-result">❤️ 100% ❤️</div>
+    </div>
+    <div class="countdown-section">
+        <div class="countdown-label">⏳ Countdown to Our Future 💍</div>
+        <div class="countdown-timer">
+            <div class="time-box"><span class="number" id="days">00</span><span class="label">Days</span></div>
+            <div class="time-box"><span class="number" id="hours">00</span><span class="label">Hours</span></div>
+            <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+            <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
         </div>
     </div>
+    <div class="action-buttons">
+        <button class="action-btn" onclick="sendHug()">🤗 Hug</button>
+        <button class="action-btn" onclick="sendKiss()">😘 Kiss</button>
+        <button class="action-btn" onclick="showLetter()">💌 Letter</button>
+        <button class="action-btn" onclick="showPromises()">💝 Promises</button>
+    </div>
+    <div class="love-letter" id="loveLetter">
+        <div class="letter-text">My Dearest Love,<br><br>From the moment I met you, my life changed forever. You are my sunshine, my everything. I promise to love you forever... 💕</div>
+    </div>
+    <div class="promises" id="promises">
+        <h3>💝 My Promises To You</h3>
+        <div class="promise-item"><span>🌹</span> Will love you forever</div>
+        <div class="promise-item"><span>🌟</span> Will always be there for you</div>
+        <div class="promise-item"><span>💖</span> Will make you happy always</div>
+    </div>
+    <div class="future-plans">
+        <h3>🚀 Our Future Plans</h3>
+        <div class="plan-item"><span>✈️</span> Trip to Maldives</div>
+        <div class="plan-item"><span>💒</span> Dream Wedding</div>
+        <div class="plan-item"><span>🏠</span> Our First Home</div>
+    </div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <script>
-        // Messages Array
-        const messages = [
-            "❤️ I Love You So Much! ❤️", "🥰 You're My Everything! 🥰",
-            "😘 Love You Miss You! 😘", "💕 My Heart Beats For You! 💕",
-            "😍 Can't Live Without You! 😍", "💖 You Are My Life! 💖",
-            "🌹 My Rose, My Love! 🌹", "👑 You Are My Queen! 👑",
-            "💞 Together Forever! 💞
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const messages = ["❤️ I Love You! ❤️", "🥰 You're My Everything! 🥰", "😘 Love You! 😘", "💕 My Heart! 💕", "😍 Forever Yours! 😍"];
+let currentMsg = 0;
+
+function nextMessage() {
+    currentMsg = (currentMsg + 1) % messages.length;
+    document.getElementById('changing-text').innerText = messages[currentMsg];
+}
+
+setInterval(() => {
+    if(document.getElementById('message').style.display === 'block') {
+        nextMessage();
+    }
+}, 3000);
+
+// Three.js
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({alpha: true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const cube = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial({color: 0xff0055, wireframe: true}));
+scene.add(cube);
+
+const particlesGeo = new THREE.BufferGeometry();
+const particlesCount = 700;
+const posArray = new Float32Array(particlesCount * 3);
+for(let i=0; i<particlesCount*3; i++) posArray[i] = (Math.random()-0.5)*20;
+particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+const particles = new THREE.Points(particlesGeo, new THREE.PointsMaterial({size: 0.02, color: 0xff0055}));
+scene.add(particles);
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    cube.rotation.x += 0.01; cube.rotation.y += 0.01;
+    particles.rotation.y += 0.001;
+    renderer.render(scene, camera);
+}
+animate();
+
+// Buttons
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const message = document.getElementById('message');
+const ui = document.getElementById('mainUI');
+const cats = document.getElementById('cats');
+
+yesBtn.addEventListener('click', () => {
+    ui.style.display = 'none';
+    message.style.display = 'block';
+    cube.material.color.set(0x00ff00);
+    particles.material.color.set(0x00ff00);
+    triggerConfetti();
+    startCountdown();
+    if(!isPlaying) toggleMusic();
+});
+
+noBtn.addEventListener('mouseenter', () => cats.style.display = 'block');
+noBtn.addEventListener('mouseleave', () => cats.style.display = 'none');
+noBtn.addEventListener('click', () => {
+    noBtn.style.transform = `translate(${Math.random()*200-100}px, ${Math.random()*200-100}px)`;
+    noBtn.style.fontSize = (parseFloat(window.getComputedStyle(noBtn).fontSize)-2)+"px";
+});
+
+// Music
+const songs = [
+    'https://www.soundhel
