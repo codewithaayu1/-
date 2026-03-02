@@ -1,169 +1,68 @@
-// Navigation Functions
-function goToProposal() {
-    switchSection('proposal');
-    showToast('मेरी बात सुनो... 💕');
+// 1. Three.js Setup for 3D Background
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById('bg-animation').appendChild(renderer.domElement);
+
+// Create a glowing cube (3D Object)
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ 
+    color: 0xff0055, 
+    wireframe: true 
+});
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// Particles Background
+const particlesGeometry = new THREE.BufferGeometry();
+const particlesCount = 700;
+const posArray = new Float32Array(particlesCount * 3);
+
+for(let i = 0; i < particlesCount * 3; i++) {
+    posArray[i] = (Math.random() - 0.5) * 20;
 }
 
-function goToWhatsApp() {
-    switchSection('whatsapp-section');
-    showToast('अपना नंबर शेयर करो 📱');
+particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.02,
+    color: 0xff0055
+});
+const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particlesMesh);
+
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    
+    particlesMesh.rotation.y += 0.001;
+    
+    renderer.render(scene, camera);
 }
+animate();
 
-function switchSection(sectionId) {
-    // Hide all sections
-    const sections = document.querySelectorAll('.section');
-    sections.forEach(section => {
-        section.classList.remove('active');
-    });
+// 2. Button Logic
+const yesBtn = document.getElementById('yesBtn');
+const noBtn = document.getElementById('noBtn');
+const message = document.getElementById('message');
+const ui = document.querySelector('.ui-container');
 
-    // Show selected section
-    const activeSection = document.getElementById(sectionId);
-    if (activeSection) {
-        activeSection.classList.add('active');
-    }
-}
-
-// WhatsApp Form Handler
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('whatsappForm');
-    const input = document.getElementById('whatsappNumber');
-    const counterDisplay = document.getElementById('counter-display');
-    const countNumber = document.getElementById('countNumber');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const phoneNumber = input.value.trim();
-
-        // Validate phone number
-        if (!phoneNumber || phoneNumber.length < 10) {
-            showToast('❌ कृपया सही फोन नंबर डालें');
-            return;
-        }
-
-        // Get or create counter
-        let proposalCount = parseInt(localStorage.getItem('proposalCount') || '0');
-        proposalCount++;
-        localStorage.setItem('proposalCount', proposalCount);
-
-        // Update counter display
-        countNumber.textContent = proposalCount;
-        counterDisplay.classList.remove('hidden');
-
-        // Send WhatsApp Message
-        sendWhatsAppMessage(phoneNumber, proposalCount);
-
-        // Clear input
-        input.value = '';
-
-        // Show toast
-        showToast('✅ Message भेज दिया गया! 💌');
-
-        // Move to final section after 2 seconds
-        setTimeout(() => {
-            switchSection('final-message');
-        }, 2000);
-    });
+yesBtn.addEventListener('click', () => {
+    // Show Love Message
+    ui.style.display = 'none';
+    message.style.display = 'block';
+    
+    // Change 3D cube to green
+    cube.material.color.set(0x00ff00);
 });
 
-function sendWhatsAppMessage(phoneNumber, count) {
-    const message = encodeURIComponent(
-        `🎉 आपको एक SPECIAL MESSAGE आया है! 🎉\n\n` +
-        `हेलो! मैं हूँ Aayu 💖\n\n` +
-        `यह मेरा ${count}वां Proposal है! 😊\n\n` +
-        `मैंने एक खूबसूरत website बनाई है अपने लिए...\n` +
-        `अगर तुम्हें देखना है तो यहाँ जाओ:\n\n` +
-        `💌 तुम मेरी दुनिया हो!\n` +
-        `💕 तुम मेरी खुशी हो!\n` +
-        `💝 तुम मेरी हर चीज़ हो!\n\n` +
-        `क्या तुम मेरी जीवन के सबसे बड़े फैसले में शामिल होना चाहती हो? 💍\n\n` +
-        `- Aayu ❤️`
-    );
-
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
-    window.open(whatsappURL, '_blank');
-}
-
-// Move button function (No button)
-function moveButton(button) {
-    const randomX = Math.random() * 200 - 100;
-    const randomY = Math.random() * 200 - 100;
-
-    button.style.transform = `translate(${randomX}px, ${randomY}px)`;
-}
-
-// Celebrate function (Yes button)
-function celebrate() {
-    const celebrationMsg = document.getElementById('celebration-message');
-    celebrationMsg.classList.remove('hidden');
-
-    // Trigger confetti
-    triggerConfetti();
-
-    // Add multiple hearts
-    createHearts();
-}
-
-function createHearts() {
-    for (let i = 0; i < 10; i++) {
-        const heart = document.createElement('div');
-        heart.textContent = '❤️';
-        heart.style.position = 'fixed';
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.top = '0px';
-        heart.style.fontSize = (20 + Math.random() * 30) + 'px';
-        heart.style.zIndex = '9999';
-        heart.style.pointerEvents = 'none';
-        heart.style.animation = 'fallHearts 3s ease-in forwards';
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 3000);
-    }
-}
-
-function triggerConfetti() {
-    for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.textContent = ['🎉', '💕', '💖', '✨'][Math.floor(Math.random() * 4)];
-        confetti.style.position = 'fixed';
-        confetti.style.left = Math.random() * window.innerWidth + 'px';
-        confetti.style.top = '0px';
-        confetti.style.fontSize = '30px';
-        confetti.style.zIndex = '9999';
-        confetti.style.pointerEvents = 'none';
-        confetti.style.animation = 'confettiFall 3s ease-in forwards';
-        document.body.appendChild(confetti);
-
-        setTimeout(() => confetti.remove(), 3000);
-    }
-}
-
-// Toast function
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.classList.add('show');
-
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
-}
-
-// Add keyframe animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fallHearts {
-        to {
-            transform: translateY(100vh) rotate(360deg);
-            opacity: 0;
-        }
-    }
-
-    @keyframes confettiFall {
-        to {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
+noBtn.addEventListener('click', () => {
+    // Simple animation to make button run away (Optional)
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+});
