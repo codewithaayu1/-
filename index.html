@@ -1,118 +1,32 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ Aayu's Proposal ❤️</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Will You Be Mine?</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Three.js Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <!-- 3D Canvas Background -->
-    <div id="canvas-container"></div>
-    
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-content">
-            <h1 class="logo">💖 Aayu 💖</h1>
+    <div class="ui-container">
+        <h1 class="title">I Have Something To Ask...</h1>
+        <p class="subtitle">Look at the heart below 💍</p>
+        
+        <div class="buttons">
+            <button id="yesBtn" class="btn yes">YES 💖</button>
+            <button id="noBtn" class="btn no">NO 😢</button>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Home Section -->
-        <section id="home" class="section active">
-            <div class="content">
-                <h1 class="title">नमस्ते! 👋</h1>
-                <h2 class="subtitle">मैं हूँ <span class="name-highlight">Aayu</span></h2>
-                <p class="intro-text">
-                    मेरे जीवन में सबसे खूबसूरत moment आने वाला है...
-                </p>
-                <button class="btn btn-primary" onclick="goToProposal()">
-                    आगे बढ़ें ➜
-                </button>
-            </div>
-            <div class="floating-hearts">
-                <span class="heart">❤️</span>
-                <span class="heart">💕</span>
-                <span class="heart">💖</span>
-                <span class="heart">💗</span>
-                <span class="heart">💝</span>
-            </div>
-        </section>
-
-        <!-- Proposal Section -->
-        <section id="proposal" class="section">
-            <div class="proposal-content">
-                <h2 class="proposal-title">तुम मेरे जीवन में हो...</h2>
-                <p class="proposal-text">
-                    हर दिन तुम्हारे साथ एक खूबसूरत सपना है।<br>
-                    तुम मेरी मुस्कान हो, मेरी खुशी हो।<br>
-                    मेरी पूरी ज़िंदगी तुम्हारे साथ गुज़ारना चाहता हूँ।
-                </p>
-                <button class="btn btn-primary" onclick="goToWhatsApp()">
-                    आगे बढ़ें ➜
-                </button>
-            </div>
-        </section>
-
-        <!-- WhatsApp Counter Section -->
-        <section id="whatsapp-section" class="section">
-            <div class="whatsapp-content">
-                <h2 class="whatsapp-title">💬 अपना WhatsApp नंबर डालें</h2>
-                <p class="whatsapp-subtitle">एक Special Message और Counter भेजेंगे 🎁</p>
-                
-                <form id="whatsappForm" class="form-group">
-                    <div class="input-wrapper">
-                        <input 
-                            type="tel" 
-                            id="whatsappNumber" 
-                            placeholder="देश कोड के साथ नंबर (जैसे: 91XXXXXXXXXX)"
-                            required
-                            pattern="[0-9]{10,15}"
-                        >
-                        <button type="submit" class="btn btn-whatsapp">
-                            📱 WhatsApp पर भेजें
-                        </button>
-                    </div>
-                    <p class="form-note">* आपका नंबर safe है और शेयर नहीं होगा</p>
-                </form>
-
-                <div id="counter-display" class="counter-section hidden">
-                    <h3>✨ मेरा Proposal Counter ✨</h3>
-                    <div class="counter-container">
-                        <div class="counter-box">
-                            <div class="counter-number" id="countNumber">0</div>
-                            <div class="counter-label">बार Propose हुआ हूँ</div>
-                        </div>
-                    </div>
-                    <p class="counter-message">
-                        यह message आपके WhatsApp पर भेज दिया गया है! 💌
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Final Message Section -->
-        <section id="final-message" class="section">
-            <div class="final-content">
-                <h2>क्या तुम मेरे साथ हो? 💍</h2>
-                <div class="button-group">
-                    <button class="btn btn-yes" onclick="celebrate()">हाँ! 💕</button>
-                    <button class="btn btn-no" onclick="moveButton(this)">नहीं</button>
-                </div>
-                <p id="celebration-message" class="hidden celebration-text">
-                    🎉 तुम मेरी खुशी हो! 🎉<br>
-                    मुझे बहुत प्यार है तुम्हारे लिए! 💖
-                </p>
-            </div>
-        </section>
     </div>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+    <div id="bg-animation"></div>
+
+    <!-- Hidden Surprise Message -->
+    <div id="message" class="hidden">
+        <h1>I LOVE YOU! ❤️</h1>
+        <p>See you at the altar! 😘</p>
+    </div>
 
     <script src="script.js"></script>
-    <script src="three-d.js"></script>
 </body>
-          </html>
+</html>
